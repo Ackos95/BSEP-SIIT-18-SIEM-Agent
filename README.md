@@ -41,7 +41,5 @@ python main.py
 ### Testing
 
 **This method is only temporary!**
-Add some custom `.log` files (format doesn't matter for now) in `SIEM-AGENT/test-logs`, and update configuration to
-watch that folder (or just leave example config). After that start the app, and try modifying some of the `.log` files
-from that folder, wait for 15-30 seconds for changes to take an effect, and log with request (which would be sent)
-should be visible in console.
+Update configuration to watch `./test-logs` folder (already set up in example config). After that start the app,
+and in other terminal tab run and run `python ./test-scripts/simulate-logs.py LOGGER_NAME`, and watch it update.

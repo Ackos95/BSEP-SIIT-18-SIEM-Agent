@@ -1,3 +1,8 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+
+from os import listdir, stat
+from os.path import isdir, isfile, join
 from watchdog.observers import Observer
 from app.log_watchers.log_file_event_handler import LogFileEventHandler
 
@@ -19,6 +24,13 @@ class LogWatchers(object):
         self._config = config
         self._observers = []
         self._handlers = []
+        self._files = {}
+
+    def _inspect_files(self, dir_name):
+            for entry in listdir(dir_name):
+                file_path = join(dir_name, entry)
+                if isfile(file_path):
+                    self.update_read_file_size(file_path)
 
     def _create_handler(self):
         """
@@ -27,7 +39,7 @@ class LogWatchers(object):
         :return: {LogFileEventHandler} instance
         """
 
-        return LogFileEventHandler(self._config)
+        return LogFileEventHandler(self, self._config)
 
     def _create_observer(self, dir_path, handler):
         """
@@ -53,15 +65,17 @@ class LogWatchers(object):
         """
 
         for dir_path in self._config['watch-directories']:
-            handler = self._create_handler()
-            observer = self._create_observer(dir_path, handler)
+            if isdir(dir_path):
+                # fetch initial size of all files in watched directories (for caching)
+                self._inspect_files(dir_path)
 
-            print('Observer and handler created for: ', dir_path)
+                handler = self._create_handler()
+                observer = self._create_observer(dir_path, handler)
 
-            self._handlers.append(handler)
-            self._observers.append(observer)
+                self._handlers.append(handler)
+                self._observers.append(observer)
 
-            observer.start()
+                observer.start()
 
     def stop(self):
         """
@@ -76,3 +90,25 @@ class LogWatchers(object):
         # clear lists (loose references - help garbage collector)
         self._observers = []
         self._handlers = []
+
+    def get_read_file_size(self, file_path):
+        """
+        Helper method for retrieving last read file size
+
+        :param file_path: path to the file which should be read
+        :return: size of the file on last read
+        """
+
+        if file_path not in self._files.keys() or stat(file_path).st_size < self._files[file_path]:
+            self._files[file_path] = 0
+
+        return self._files[file_path]
+
+    def update_read_file_size(self, file_path):
+        """
+        Helper method for updating last read file size
+
+        :param file_path: path to the file which was just read
+        """
+
+        self._files[file_path] = stat(file_path).st_size

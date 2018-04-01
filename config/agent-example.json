@@ -3,5 +3,6 @@
     "./test-logs"
   ],
   "filter": ".*",
-  "siem-core-url": "http://localhost:3000/agent/notify"
+  "siem-core-url": "http://localhost:3000/api/v1/entries",
+  "API_KEY": "API_KEY_HERE"
 }

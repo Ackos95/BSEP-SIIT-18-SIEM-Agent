@@ -2,10 +2,9 @@
 # -*- coding: utf-8 -*-
 
 from requests import post
-from SysLogParser.parser import SysLogParser
 
 
-def notify_siem_core(core_url, data):
+def notify_siem_core(core_url, data, agentId):
     """
     Notify function, sending POST request to `SIEM-Core` with new (prepared) data
 
@@ -13,5 +12,5 @@ def notify_siem_core(core_url, data):
     :param data: iterable containing all of the `SysLogParser.SysLogEntry` objects to be sent
     """
 
-    # request = post(core_url, data=''.join(SysLogParser.format_rfc5424(data)))
-    print('POST {}, data='.format(core_url), ''.join(SysLogParser.format_rfc5424(data)))
+    request = post(core_url, data=''.join(data), headers={'Authorization': agentId})
+    print('[{}] POST {}: "{}"'.format(request.status_code, core_url, request.text))
