@@ -1,0 +1,7 @@
+{
+  "watch-directories": [
+    "./test-logs"
+  ],
+  "filter": ".*",
+  "siem-core-url": "http://localhost:3000/agent/notify"
+}
