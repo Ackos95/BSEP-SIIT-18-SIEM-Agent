@@ -1,6 +1,15 @@
 {
   "watch-directories": [
-    "./test-logs"
+    {
+      "path": "./test-logs",
+      "log-pattern": "custom",  // "custom", "rfc5424", "rfc3164"
+      "pattern-options": {
+        "matcher": "^(.*)",
+        "variables": [
+          "log"
+        ]
+      }
+    }
   ],
   "filter": ".*",
   "siem-core-url": "http://localhost:3000/agent/notify"
