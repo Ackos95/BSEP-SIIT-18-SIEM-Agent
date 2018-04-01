@@ -27,10 +27,10 @@ class LogWatchers(object):
         self._files = {}
 
     def _inspect_files(self, dir_name):
-            for entry in listdir(dir_name):
-                file_path = join(dir_name, entry)
-                if isfile(file_path):
-                    self.update_read_file_size(file_path)
+        for entry in listdir(dir_name):
+            file_path = join(dir_name, entry)
+            if isfile(file_path):
+                self.update_read_file_size(file_path)
 
     def _create_handler(self):
         """

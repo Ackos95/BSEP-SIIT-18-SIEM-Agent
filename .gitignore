@@ -58,3 +58,4 @@ fabric.properties
 .idea/httpRequests
 
 **/__pycache__
+**/**/*.pyc
