@@ -2,7 +2,7 @@
 
 Python application for `SIEM` agent which should run on monitored machines.
 
-App starts watching folders which are configured to be watched through `agent-config.json` file
+App starts watching folders which are configured to be watched through config file pulled from siem-core file
 (inside `watch-directories` array), and each file modification is captured and handled. Log file is
 initially filtered through `regex match` with pattern from configuration (`filter` key) and then,
 lines which passed check are being pulled through `SysLogParser` to get an valid object representation
