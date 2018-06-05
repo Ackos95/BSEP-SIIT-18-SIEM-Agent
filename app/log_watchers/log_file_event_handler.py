@@ -13,7 +13,7 @@ class LogFileEventHandler(FileSystemEventHandler):
     notifying SIEM-Core
     """
 
-    def __init__(self, context, config):
+    def __init__(self, context, config, dir_config):
         """
         Class constructor, storing DI injected configuration
 
@@ -23,6 +23,7 @@ class LogFileEventHandler(FileSystemEventHandler):
 
         self._context = context
         self._config = config
+        self._dir_config = dir_config
 
     def _handle_file_change(self, file_path):
         """
@@ -38,7 +39,7 @@ class LogFileEventHandler(FileSystemEventHandler):
         try:
             with open(file_path, 'r') as modified_file:
                 modified_file.seek(self._context.get_read_file_size(file_path))
-                interesting_lines = list(filter(lambda line: re.search(self._config['filter'], line) is not None,
+                interesting_lines = list(filter(lambda line: re.search(self._dir_config['filterRegex'], line) is not None,
                                                 modified_file.readlines()))
                 self._context.update_read_file_size(file_path)
 
@@ -49,7 +50,7 @@ class LogFileEventHandler(FileSystemEventHandler):
                 # data = SysLogParser.parse_rfc5424(interesting_lines)
                 # TODO: here should go some modification of data entries (customizations)
 
-                notify_siem_core(self._config['siem-core-url'], interesting_lines, self._config['API_KEY'])
+                notify_siem_core(self._config['agent']['logDestinationIp'], interesting_lines)
         except IOError:
             # silent error (mostly for tmp files which get created and deleted instantly)
             pass

@@ -9,6 +9,7 @@ verify_ssl = true
 watchdog = "*"
 requests = "*"
 SysLogParser = {git = "https://github.com/Ackos95/Python-SysLogParser"}
+pyopenssl = "*"
 
 [requires]
 python_version = "3.5"

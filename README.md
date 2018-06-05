@@ -22,6 +22,11 @@ pipenv install
 Before app is started, you need to create configuration. In `SIEM-Agent/config` there is an file
 `agent-example.json`, copy it into `agent-config.json` and modify data itself before starting app.
 
+Also you need to set up certificates for current agent. Inside `config/certs` folder, you should copy
+appropriate `trusted_ca.crt` (from `siem-core`), and add one (`.p12`) certificate file for your agent.
+Make sure that `trusted_ca.crt` contains server as a trusted source, and to match `config.cert` configurations
+with actual data in `config/cert` folder (name of the file must match and password for unlocking `.p12` file). 
+
 ### Start app
 
 Start virtual environment (Only once)

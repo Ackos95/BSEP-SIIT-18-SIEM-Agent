@@ -32,14 +32,14 @@ class LogWatchers(object):
             if isfile(file_path):
                 self.update_read_file_size(file_path)
 
-    def _create_handler(self):
+    def _create_handler(self, watched_dir):
         """
         Helper function for creating handlers for each watched directory
 
         :return: {LogFileEventHandler} instance
         """
 
-        return LogFileEventHandler(self, self._config)
+        return LogFileEventHandler(self, self._config, watched_dir)
 
     def _create_observer(self, dir_path, handler):
         """
@@ -64,13 +64,13 @@ class LogWatchers(object):
         It also starts each of the newly created `watchdog.observers.Observer` threads.
         """
 
-        for dir_path in self._config['watch-directories']:
-            if isdir(dir_path):
+        for watched_dir in self._config['agent']['watchedFolders']:
+            if isdir(watched_dir['path']):
                 # fetch initial size of all files in watched directories (for caching)
-                self._inspect_files(dir_path)
+                self._inspect_files(watched_dir['path'])
 
-                handler = self._create_handler()
-                observer = self._create_observer(dir_path, handler)
+                handler = self._create_handler(watched_dir)
+                observer = self._create_observer(watched_dir['path'], handler)
 
                 self._handlers.append(handler)
                 self._observers.append(observer)

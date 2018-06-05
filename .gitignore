@@ -1,6 +1,15 @@
 # Configs
-config/*
+
+# Exclude all json files and all certificates
+config/*.json
+config/**/*.pem
+config/**/*.p12
+config/**/*.crt
+
+# Include example files (and `trusted_ca`)
 !config/agent-example.json
+!config/certs/trusted_ca.crt
+!config/certs/generated/.gitkeep
 
 # Testing logs folder
 test-logs/*

@@ -3,6 +3,7 @@
 
 
 import time
+from app.networking.ssl import check_certs
 from app.config.config_loader import load_config
 from app.log_watchers.initialize import LogWatchers
 
@@ -13,6 +14,11 @@ def bootstrap():
     after that enters infinite loop on main thread.
     """
 
+    if not check_certs():
+        print('Invalid certificates provided. Please add certificates into `config/certs` folder')
+        return
+
+    # print(load_config())
     watchers = LogWatchers(load_config())
 
     try:

@@ -4,7 +4,7 @@
 from requests import post
 
 
-def notify_siem_core(core_url, data, agent_id):
+def notify_siem_core(core_url, data):
     """
     Notify function, sending POST request to `SIEM-Core` with new (prepared) data
 
@@ -13,5 +13,6 @@ def notify_siem_core(core_url, data, agent_id):
     :param agent_id: API_KEY for agent when updating SIEM-Core
     """
 
-    request = post(core_url, data=''.join(data), headers={'Authorization': agent_id})
-    print('[{}] POST {}: "{}"'.format(request.status_code, core_url, request.text))
+    print('TODO: NOTIFY SIEM-CORE', core_url, data)
+    # request = post(core_url, data=''.join(data), headers={'Authorization': agent_id})
+    # print('[{}] POST {}: "{}"'.format(request.status_code, core_url, request.text))
