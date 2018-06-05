@@ -1,7 +1,7 @@
 #!/usr/env/bin python
 # -*- coding: utf-8 -*-
 
-from logging import getLogger, Formatter, FileHandler, DEBUG
+from logging import getLogger, Formatter, FileHandler, ERROR
 from app.utils.path import get_in_root_folder
 
 
@@ -41,7 +41,7 @@ def _setup_logger(logger_name):
     """
 
     logger = getLogger(logger_name)
-    logger.setLevel(DEBUG)  # always set DEBUG level so that logger is writing any level
+    logger.setLevel(ERROR)  # always set DEBUG level so that logger is writing any level
     logger.addHandler(_create_handler())
 
     return logger

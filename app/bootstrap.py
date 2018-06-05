@@ -6,6 +6,7 @@ import time
 from app.networking.ssl import check_certs
 from app.config.config_loader import load_config
 from app.log_watchers.initialize import LogWatchers
+from app.server.server import start_firewall_server
 
 
 def bootstrap():
@@ -14,17 +15,12 @@ def bootstrap():
     after that enters infinite loop on main thread.
     """
 
-    if not check_certs():
-        print('Invalid certificates provided. Please add certificates into `config/certs` folder')
-        return
-
-    # print(load_config())
-    watchers = LogWatchers(load_config())
+    config = load_config()
+    watchers = LogWatchers(config)
 
     try:
         watchers.start()
         print('SIEM-Agent started')
-        while True:
-            time.sleep(1)
+        start_firewall_server(config)
     except KeyboardInterrupt:
         watchers.stop()

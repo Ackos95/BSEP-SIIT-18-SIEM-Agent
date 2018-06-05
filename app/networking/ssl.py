@@ -8,8 +8,8 @@ from os.path import exists
 from app.utils.path import get_in_config_folder
 
 
-def check_certs():
-    return exists(get_in_config_folder('certs/agent.p12')) and\
+def check_certs(cert_config):
+    return exists(get_in_config_folder('certs/' + cert_config['name'] + '.p12')) and\
            exists(get_in_config_folder('certs/trusted_ca.crt'))
 
 
@@ -47,3 +47,16 @@ def get_agent_ssl_context(cert_config):
         ctx.load_cert_chain(*_generate_agent_pem_files(p12))
 
     return ctx
+
+
+def get_common_name(cert):
+    for t1 in cert['subject']:
+        for t2 in t1:
+            if t2[0] == 'commonName':
+                return t2[1]
+
+
+def get_ssl_request_ip(sock):
+    addr = sock.getpeername()
+
+    return addr[0] + ':' + str(addr[1])

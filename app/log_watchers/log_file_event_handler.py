@@ -47,7 +47,8 @@ class LogFileEventHandler(FileSystemEventHandler):
             if interesting_lines:
                 notify_siem_core(
                     self._config['agent']['logDestinationIp'],
-                    parse_log_lines(interesting_lines, self._dir_config['logTypes'], self._dir_config['path'], file_path)
+                    parse_log_lines(interesting_lines, self._dir_config['logTypes'], self._dir_config['path'], file_path),
+                    self._config['static']['cert']
                 )
         except IOError:
             # silent error (mostly for tmp files which get created and deleted instantly)

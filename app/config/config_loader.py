@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-from json import load
+import json
 
 from app.utils.path import get_in_config_folder
 from app.networking.api import get_config
@@ -16,7 +16,7 @@ def load_static_config():
 
     try:
         with open(get_in_config_folder('agent-config.json')) as config_file:
-            config = load(config_file)
+            config = json.load(config_file)
 
         return config
     except IOError:
@@ -31,7 +31,15 @@ def load_agent_config(auth_server_url, cert_config):
     :return: {Dictionary} python object representation of the dynamic agent configuration
     """
 
-    api_config = get_config(auth_server_url, cert_config)
+    res = get_config(auth_server_url, cert_config)
+    if res.status == 200:
+        api_config = json.loads(res.read().decode('utf-8'), encoding='utf-8')
+    else:
+        api_config = {
+            'destinationIp': auth_server_url,
+            'watchedFolders': [],
+        }
+
     # patch until config on api is updated
     for watched_dir in api_config['watchedFolders']:
         for log_type in watched_dir['logTypes']:

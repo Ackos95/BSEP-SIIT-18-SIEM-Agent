@@ -4,6 +4,7 @@
 import re
 import socket
 import datetime
+import platform
 
 
 def _extract_value(line, log_config, regex_key):
@@ -47,8 +48,10 @@ def _parse_log_line(line, log_config, dir_path, file_path):
         'rawMessage': line,
         'hostName': socket.gethostname(),
         'filePath': file_path,
-        'directoryPath': dir_path,
-        'isPersonalLog': True
+        'directory': dir_path,
+        'operatingSystem': platform.system().upper(),
+        'operatingSystemVersion': platform.platform(),
+        'personalLog': True
     }
 
 

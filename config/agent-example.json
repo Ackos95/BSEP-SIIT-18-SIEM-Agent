@@ -3,5 +3,8 @@
   "cert": {
     "name": "agent",
     "password": "changeit"
+  },
+  "firewall": {
+    "port": 8453
   }
 }
