@@ -122,7 +122,7 @@ def create_handler():
     """
 
     handler = FileHandler(join(dirname(__file__), '../test-logs/simulated.log'))
-    handler.setFormatter(Formatter('%(asctime)s - %(name)s - [%(levelname)s] - %(message)s'))
+    handler.setFormatter(Formatter('%(asctime)s - %(name)s - [%(levelname)s] - %(message)s', '%Y-%m-%d %H:%M:%S'))
 
     return handler
 

@@ -5,6 +5,8 @@ from os import listdir, stat
 from os.path import isdir, isfile, join
 from watchdog.observers import Observer
 from app.log_watchers.log_file_event_handler import LogFileEventHandler
+from app.utils.path import get_in_root_folder
+from app.logger.logger import LOG_TYPES
 
 
 class LogWatchers(object):
@@ -56,6 +58,18 @@ class LogWatchers(object):
 
         return observer
 
+    def _start_watching_directory(self, dir_config):
+        # fetch initial size of all files in watched directories (for caching)
+        self._inspect_files(dir_config['path'])
+
+        handler = self._create_handler(dir_config)
+        observer = self._create_observer(dir_config['path'], handler)
+
+        self._handlers.append(handler)
+        self._observers.append(observer)
+
+        observer.start()
+
     def start(self):
         """
         Function going through configuration, instantiating and storing observers and hanlders
@@ -64,18 +78,16 @@ class LogWatchers(object):
         It also starts each of the newly created `watchdog.observers.Observer` threads.
         """
 
+        # watch own log directory
+        self._start_watching_directory({
+            'path': get_in_root_folder('logs'),
+            'filterRegex': '(.*)',
+            'logTypes': LOG_TYPES
+        })
+
         for watched_dir in self._config['agent']['watchedFolders']:
             if isdir(watched_dir['path']):
-                # fetch initial size of all files in watched directories (for caching)
-                self._inspect_files(watched_dir['path'])
-
-                handler = self._create_handler(watched_dir)
-                observer = self._create_observer(watched_dir['path'], handler)
-
-                self._handlers.append(handler)
-                self._observers.append(observer)
-
-                observer.start()
+                self._start_watching_directory(watched_dir)
 
     def stop(self):
         """

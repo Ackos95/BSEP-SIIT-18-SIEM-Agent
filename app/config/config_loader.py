@@ -31,7 +31,13 @@ def load_agent_config(auth_server_url, cert_config):
     :return: {Dictionary} python object representation of the dynamic agent configuration
     """
 
-    return get_config(auth_server_url, cert_config)
+    api_config = get_config(auth_server_url, cert_config)
+    # patch until config on api is updated
+    for watched_dir in api_config['watchedFolders']:
+        for log_type in watched_dir['logTypes']:
+            log_type['dateTimeFormat'] = '%Y-%m-%d %H:%M:%S'
+
+    return api_config
 
 
 def load_config():

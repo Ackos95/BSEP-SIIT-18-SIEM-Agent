@@ -1,5 +1,6 @@
 import re
 from watchdog.events import FileSystemEventHandler
+from app.log_watchers.log_parser import parse_log_lines
 from app.siem_notifier.notifier import notify_siem_core
 
 
@@ -44,13 +45,10 @@ class LogFileEventHandler(FileSystemEventHandler):
                 self._context.update_read_file_size(file_path)
 
             if interesting_lines:
-                # TODO: Handle log entries (transform maybe?), for now just pass logs as they are read
-
-                # TODO: here should go some check for format (with exceptions)
-                # data = SysLogParser.parse_rfc5424(interesting_lines)
-                # TODO: here should go some modification of data entries (customizations)
-
-                notify_siem_core(self._config['agent']['logDestinationIp'], interesting_lines)
+                notify_siem_core(
+                    self._config['agent']['logDestinationIp'],
+                    parse_log_lines(interesting_lines, self._dir_config['logTypes'], self._dir_config['path'], file_path)
+                )
         except IOError:
             # silent error (mostly for tmp files which get created and deleted instantly)
             pass
