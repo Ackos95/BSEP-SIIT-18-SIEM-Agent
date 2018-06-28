@@ -51,7 +51,8 @@ def _parse_log_line(line, log_config, dir_path, file_path):
         'directory': dir_path,
         'operatingSystem': platform.system().upper(),
         'operatingSystemVersion': platform.platform(),
-        'personalLog': True
+        'personalLog': True,
+        'logTypeName': log_config['name']
     }
 
 

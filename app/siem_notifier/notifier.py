@@ -16,6 +16,6 @@ def notify_siem_core(core_url, data, cert_config):
     if len(data) == 0:
         return
 
-    res = post_logs(core_url, cert_config, data[0])
+    res = post_logs(core_url, cert_config, data)
 
     print('[{}] POST {}: "{}"'.format(res.status, core_url, res.read()))

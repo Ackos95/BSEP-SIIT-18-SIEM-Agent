@@ -10,6 +10,7 @@ app_logger = None
 
 LOG_TYPES = [
     {
+        "name": "self-logs",
         "contextRegex": "(?: - )(?P<value>.*?)(?: - )",
         "messageRegex": "(?:.*)(?: - )(?P<value>.*)$",
         "severityRegex": "(?P<value>TRACE|DEBUG|INFO|WARN|ERROR|FATAL)",
@@ -27,7 +28,7 @@ def _create_handler():
     """
 
     handler = FileHandler(get_in_root_folder('logs/app.log'))
-    handler.setFormatter(Formatter('%(asctime)s - %(name)s - [%(levelname)s] - %(message)s'))
+    handler.setFormatter(Formatter('%(asctime)s - %(name)s - [%(levelname)s] - %(message)s', '%Y-%m-%d %H:%M:%S'))
 
     return handler
 
