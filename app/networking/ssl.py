@@ -37,7 +37,7 @@ def _generate_agent_pem_files(p12):
 def get_agent_ssl_context(cert_config):
     ctx = ssl.create_default_context(purpose=ssl.Purpose.CLIENT_AUTH)
     ctx.verify_mode = ssl.CERT_REQUIRED
-    ctx.options |= ssl.OP_NO_TLSv1_2
+#    ctx.options |= ssl.OP_NO_TLSv1_2
 
     ctx.load_verify_locations(get_in_config_folder('certs/trusted_ca.crt'))
 
