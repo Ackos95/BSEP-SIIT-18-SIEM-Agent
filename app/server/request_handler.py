@@ -35,9 +35,10 @@ def get_configured_FirewallRequestHandler(config):
                 submit_body = json.loads(body.decode('utf-8'), encoding='utf-8')
                 res_body = json.loads(res.read().decode('utf-8'), encoding='utf-8')
 
-                if not res_body['isFirewall'] or (res_body['isFirewall'] and submit_body['personalLog']):
-                    submit_body['cn'] = common_name
-                    submit_body['personalLog'] = False
+                if 'firewall' not in res_body or ('firewall' in res_body and len(submit_body) and submit_body[0]['personalLog']):
+                    for log in submit_body:
+                        log['cn'] = common_name
+                        log['personalLog'] = False
 
                 post_res = post_logs(config['static']['authorizationServerIpAndPort'], config['static']['cert'], submit_body)
 
